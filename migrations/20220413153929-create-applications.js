@@ -17,6 +17,10 @@ module.exports = {
       regNum: {
         type: Sequelize.STRING
       },
+      gender: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
       email: {
         type: Sequelize.STRING
       },

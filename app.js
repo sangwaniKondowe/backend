@@ -1,5 +1,6 @@
 const express = require('express');
 require('dotenv').config();
+const logger = require("morgan");
 const AuthRoutes = require('./Routes/loginRoute')
 
 const app = express();

@@ -77,3 +77,40 @@ exports.countAll = async (req, res) => {
         console.log(err)
     }
 }
+
+
+// Get all applications with all required details
+
+exports.allWithDetails = async (req, res) => {
+
+    try {
+
+    const user = await Application.findAll()
+    if (user) {
+      console.log(user)
+      const users = []
+  
+      user.forEach(element => {
+        users.push({
+          "uuid": element.uuid,
+          "firstname": element.firstname,
+          "lastname": element.lastname,
+          "email": element.email,
+          "regnum": element.regnum,
+          "yrofstudy": element.yrofstudy,
+          "gender": element.gender,
+          "gpa": element.gpa,
+        }
+        );
+  
+      });
+      res.send(users)
+    } else {
+      res.sendStatus(404);
+    }
+  }catch (err) {
+  
+    console.log(err)
+}
+}
+  

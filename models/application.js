@@ -27,7 +27,8 @@ const Application = dbConnection.define('applications', {
   },
   regNum: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    unique: true
   },
   gender: {
     type: DataTypes.STRING,
@@ -35,7 +36,8 @@ const Application = dbConnection.define('applications', {
   },
   email: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    unique: true
   },
   description: {
     type: DataTypes.STRING,

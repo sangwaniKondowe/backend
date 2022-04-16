@@ -8,8 +8,14 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      uuid: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        unique: true,
+      },
       status: {
         type: Sequelize.STRING
+        
       },
       createdAt: {
         allowNull: false,

@@ -2,6 +2,7 @@ const express = require('express');
 require('dotenv').config();
 const logger = require("morgan");
 const AuthRoutes = require('./Routes/loginRoute')
+const appRoutes = require('./Routes/appRoutes')
 
 const app = express();
 app.use(express.json())
@@ -23,6 +24,7 @@ app.use(bodyParser.json())
 
 
 app.use('/login', AuthRoutes)
+app.use('/application', appRoutes);
 
 const PORT = process.env.PORT || 5000;
 

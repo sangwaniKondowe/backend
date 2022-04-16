@@ -39,6 +39,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      yrofstudy: {
+        type: Sequelize.DOUBLE,
+        allowNull: false
+      },
       gpa: {
         type: Sequelize.DOUBLE,
         allowNull: false

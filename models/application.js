@@ -47,6 +47,10 @@ const Application = dbConnection.define('applications', {
     type: DataTypes.DOUBLE,
     allowNull: false
   },
+  yrofstudy: {
+    type: DataTypes.DOUBLE,
+    allowNull: false
+  },
   ref: {
     type: DataTypes.STRING,
     allowNull: false

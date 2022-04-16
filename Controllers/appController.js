@@ -1,9 +1,12 @@
 'use strict'
 const Application = require('../models/application')
 
+
+// Applying for the scholarship
+
 exports.sending_application = async (req, res) => {
     
-    const {firstname,lastname,regNum,gender,email,description,gpa,ref} = req.body
+    const {firstname,lastname,regNum,gender,email,description,gpa, yrofstudy,ref} = req.body
 
     try {
   
@@ -17,6 +20,7 @@ exports.sending_application = async (req, res) => {
         email,
         description,
         gpa,
+        yrofstudy,
         ref
       });
   
@@ -36,7 +40,40 @@ exports.sending_application = async (req, res) => {
   
     } catch (err) {
   
-      res.status(409).json({message: "You can only apply once"})
+      res.status(409)
     }
   }
 
+
+// Getting all the required information for visualization
+
+
+exports.countAll = async (req, res) => {
+    try {
+
+    const all = await Application.findAll()
+    if (all) {
+      const females = all.filter(app=>app.gender==='female')
+      const males = all.filter(app=>app.gender==='male')
+      const yr2 = all.filter(app=>app.yrofstudy=== 2)
+      const yr3 = all.filter(app=>app.yrofstudy=== 3)
+      
+  
+      const dataToReturn = {
+        totalApplications : all.length,
+        totalFemales: females.length,
+        totalMales: males.length,
+        secondyr: yr2.length,
+        thirdyr: yr3.length,
+  
+      }
+        
+      res.send(dataToReturn)
+    } else {
+      res.status(404).send("Nothing to display");
+    }
+  } catch (err) {
+  
+        console.log(err)
+    }
+}

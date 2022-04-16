@@ -40,7 +40,7 @@ exports.sending_application = async (req, res) => {
   
     } catch (err) {
   
-      res.status(409)
+      res.sendStatus(409)
     }
   }
 
@@ -113,4 +113,126 @@ exports.allWithDetails = async (req, res) => {
     console.log(err)
 }
 }
+
+// Shortlisting candidates depending on a 
+// selection criteria( ie. CS student(regnum), gpa, gender, yrofstudy)
+
+exports.markComplete = async (req, res) => {
+    const { males, females } = req.query
   
+  
+  
+    await Application.findAll()
+    .then(async (response) => {
+  
+  
+      let famaleIndes = []
+      const femaleArr = response.filter(f => f.gender === "female" && f.gpa < 3.0)
+      const malesArr = response.filter(f => f.gender === "male" && f.gpa < 3.0)
+  
+  
+      let malesActulRequired = males > malesArr.length ? malesArr.length : males
+      let femalesActulRequired = females > femaleArr.length ? femaleArr.length : females
+      let mToReturn = []
+      let fToReturn = []
+      let fHolder = []
+      let mHolder = []
+  
+      const maleSetToReturn = new Set()
+      const femaleSettoReturn = new Set();
+      if (males >= malesArr.length) {
+        mToReturn = malesArr
+      } else {
+        while (mToReturn.length != males) {
+          let first = malesArr[generateRandom(0, malesArr.length - 1, 256)]
+          mHolder.push(first)
+          mToReturn = mHolder.filter((value, index, self) =>
+            self.findIndex(v => v.id === value.id) === index
+          );
+        }
+  
+      }
+      if (females >= femaleArr.length) {
+        fToReturn = femaleArr
+      } else {
+        while (fToReturn.length != females) {
+          let first = femaleArr[generateRandom(0, femaleArr.length - 1, 256)]
+          fHolder.push(first)
+          fToReturn = fHolder.filter((value, index, self) =>
+            self.findIndex(v => v.id === value.id) === index
+          );
+        }
+      }
+  
+      const m = []
+      const f = []
+  
+  
+      for (let fem of femaleSettoReturn) {
+        f.push(fem)
+      }
+      for (let mal of maleSetToReturn) {
+        m.push(mal)
+      }
+      // = m.concat(f)
+  
+  
+      let unique = mToReturn.concat(fToReturn)
+
+      res.send({ele:  unique})
+
+})
+}
+
+    //   unique.map(async app => {
+    //     await Application.update({ status: "COMPLETED" }, {
+    //       where: { id: app.id }
+    //     })
+    //  })
+  
+  
+  
+    //   let toRData = unique.map(ui => {
+    //     return { ...ui, status: "COMPLETED" }
+    //   })
+    //   if (toRData) {
+  
+    //     let user = [];
+    //     toRData.forEach(element => {
+    //       user.push({
+    //         "id": element.id,
+    //         "uuid": element.uuid,
+    //         "firstname": element.firstname,
+    //         "lastname": element.lastname,
+    //         "email": element.email,
+    //         "regnum": element.regnum,
+    //         "yrofstudy": element.user.yrofstudy,
+    //         "gender": element.user.gender,
+    //         "gpa": element.user.gpa,
+    //       }
+    //       );
+  
+    //     });
+    //     res.send({ complete: user })
+  
+        // const emails = []
+        // user.forEach(mail => {
+        //   emails.push({
+        //     "email": mail.email,
+        //   })
+        // })
+        //console.log(emails)
+  
+        //let stringMessage = Object.values(emails);
+  
+    //     let allemails = emails.reduce((arr, email) => {
+    //       arr.push(email.email)
+    //       return (arr)
+    //     }, [])
+  
+    //     //console.log(allemails)
+  
+    //     sendEmail(allemails)
+  
+    
+     

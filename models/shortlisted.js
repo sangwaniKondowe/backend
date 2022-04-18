@@ -3,6 +3,7 @@
 const dbConnection = require("../dbConnection")
 const DataTypes = require("sequelize");
 const Application = require("./application");
+const Course = require("./course");
 const Shortlisted = dbConnection.define('shorlist', {
 
   // Model attributes are defined here
@@ -33,6 +34,14 @@ Application.hasMany(Shortlisted, {
     foreignKey: 'applicationId',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
+})
+
+Course.belongsTo(Application)
+
+Application.hasMany(Course, {
+  foreignKey: 'applicationId',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE'
 })
 
 

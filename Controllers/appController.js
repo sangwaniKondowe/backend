@@ -127,8 +127,8 @@ exports.markComplete = async (req, res) => {
   
   
       let famaleIndes = []
-      const femaleArr = response.filter(f => f.gender === "female" && f.gpa < 3.0)
-      const malesArr = response.filter(f => f.gender === "male" && f.gpa < 3.0)
+      const femaleArr = response.filter(f => f.gender === "female")
+      const malesArr = response.filter(f => f.gender === "male")
   
   
       let malesActulRequired = males > malesArr.length ? malesArr.length : males

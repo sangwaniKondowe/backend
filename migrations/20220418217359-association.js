@@ -13,10 +13,23 @@ module.exports = {
         },
         onUpdate: "CASCADE",
         onDelete: "NO ACTION",
-      })
+      }).then(async () => {
+        return await queryInterface.addColumn("courses", "applicationId", {
+          type: DataTypes.INTEGER,
+          references: {
+            model: "applications", // name of Target model
+            key: "id", // key in Target model that we're referencing
+          },
+          onUpdate: "CASCADE",
+          onDelete: "NO ACTION",
+        });
+        })
      },
     down: async (queryInterface, Sequelize) => {
        return await queryInterface
          .removeColumn("shortlisteds", "applicationId")
+         .then(async () => {
+          return await queryInterface.removeColumn("courses", "applicationId");
+        })
     },
 };

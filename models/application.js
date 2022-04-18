@@ -34,6 +34,10 @@ const Application = dbConnection.define('applications', {
     type: DataTypes.STRING,
     allowNull: false
   },
+  social: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false
+  },
   email: {
     type: DataTypes.STRING,
     allowNull: false,

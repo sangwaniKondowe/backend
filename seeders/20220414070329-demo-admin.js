@@ -7,27 +7,12 @@ module.exports = {
       {
         id: 1,
         uuid: "68f40f88-999c-11ec-b909-0242ac120002",
-        name: "Bachelor of Science in computer Science",
-        regType: "bsc-com",  
+        email: "johnnyCage@unima.ac.mw",
+        password: "$2a$10$pJbMoWls6Kw03dmB6cczquzNNEvJH1mrJlsvD5d8gJB99q/pHjm5q",
+        role: "ADMIN",
         createdAt: new Date(),
         updatedAt: new Date(),
-     },
-     {
-      id: 2,
-      uuid: "68f40e70-999c-11ec-b909-0242ac120002",
-      name: "Bachelor of Science in Networking Engineering",
-      regType: "bsc-net", 
-      createdAt: new Date(),
-      updatedAt: new Date(),
-   }, 
-   {
-    id: 3,
-    uuid: "68f40d26-999c-11ec-b909-0242ac120002",
-    name: "Bachelor of Science in Information Systems",
-    regType: "bsc-info", 
-    createdAt: new Date(),
-    updatedAt: new Date(),
- }, 
+     }, 
   ], {});
     
   },

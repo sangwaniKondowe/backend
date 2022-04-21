@@ -1,12 +1,15 @@
 'use strict'
+const { raw } = require('express');
 const Application = require('../models/application')
+const Shortlisted = require('../models/shortlist')
+const { Op } = require('sequelize');
 
 
 // Applying for the scholarship
 
 exports.sending_application = async (req, res) => {
     
-    const {firstname,lastname,regNum,gender,email,description,gpa, yrofstudy,ref} = req.body
+    const {firstname,lastname,regNum,gender,email,social,description,gpa, yrofstudy,ref} = req.body
 
     try {
   
@@ -18,6 +21,7 @@ exports.sending_application = async (req, res) => {
         regNum,
         gender,
         email,
+        social,
         description,
         gpa,
         yrofstudy,
@@ -235,4 +239,30 @@ exports.markComplete = async (req, res) => {
     //     sendEmail(allemails)
   
     
-     
+exports.prevBen = async (req, res) => {
+  try {
+
+    const history = await Shortlisted.findAll({
+      attributes: [
+        'createdAt'
+      ],
+      where: {
+        createdAt: {
+           [Op.between]: ["2021-01-01 00:00:00", "2021-12-31 00:00:00"],
+           [Op.between]: ["2022-01-01 00:00:00", "2020-12-31 00:00:00"],
+      },
+    },
+    logging: console.log,
+    raw: true,
+    order: [['createdAt', 'ASC']],
+    //limit: count
+    })
+    if(history) {
+      res.send(history)
+    }
+
+  }catch(err) {
+    console.log(err)
+  }
+}
+

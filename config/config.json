@@ -2,7 +2,7 @@
   "development": {
     "username": "postgres",
     "password": "admin",
-    "database": "scholarApi",
+    "database": "Api",
     "host": "localhost",
     "dialect": "postgres"
   },

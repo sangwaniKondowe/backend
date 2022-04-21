@@ -22,7 +22,7 @@ const Course = dbConnection.define('courses', {
     allowNull: false
   },
   regType: {
-    type: Sequelize.STRING,
+    type: DataTypes.STRING,
     allowNull: false,
   },
 }, {

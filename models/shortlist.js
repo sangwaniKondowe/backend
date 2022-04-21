@@ -4,7 +4,7 @@ const dbConnection = require("../dbConnection")
 const DataTypes = require("sequelize");
 const Application = require("./application");
 const Course = require("./course");
-const Shortlisted = dbConnection.define('shorlist', {
+const Shortlisted = dbConnection.define('shortlists', {
 
   // Model attributes are defined here
   id: {

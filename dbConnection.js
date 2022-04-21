@@ -1,6 +1,6 @@
 const { Sequelize } = require("sequelize");
 const connection = new Sequelize(
-  "scholarApi",
+  "Api",
   "postgres",
   "admin",
   {

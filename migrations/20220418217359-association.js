@@ -5,7 +5,7 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
    //addcolumn("table name","foreign key")
     return await queryInterface
-      .addColumn("shortlisteds", "applicationId", {
+      .addColumn("shortlists", "applicationId", {
         type: DataTypes.INTEGER,
         references: {
           model: "applications", // name of Target model
@@ -27,7 +27,7 @@ module.exports = {
      },
     down: async (queryInterface, Sequelize) => {
        return await queryInterface
-         .removeColumn("shortlisteds", "applicationId")
+         .removeColumn("shortlists", "applicationId")
          .then(async () => {
           return await queryInterface.removeColumn("courses", "applicationId");
         })

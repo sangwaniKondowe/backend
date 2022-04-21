@@ -9,7 +9,7 @@ const { Op } = require('sequelize');
 
 exports.sending_application = async (req, res) => {
     
-    const {firstname,lastname,regNum,gender,email,social,description,gpa, yrofstudy,ref} = req.body
+    const {firstname,lastname,regNum,gender,email,social,gpa, yrofstudy,ref} = req.body
 
     try {
   
@@ -22,7 +22,6 @@ exports.sending_application = async (req, res) => {
         gender,
         email,
         social,
-        description,
         gpa,
         yrofstudy,
         ref

@@ -43,10 +43,6 @@ const Application = dbConnection.define('applications', {
     allowNull: false,
     unique: true
   },
-  description: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
   gpa: {
     type: DataTypes.DOUBLE,
     allowNull: false

@@ -99,7 +99,7 @@ exports.allWithDetails = async (req, res) => {
           "firstname": element.firstname,
           "lastname": element.lastname,
           "email": element.email,
-          "regnum": element.regnum,
+          "regnum": element.regNum,
           "yrofstudy": element.yrofstudy,
           "gender": element.gender,
           "gpa": element.gpa,

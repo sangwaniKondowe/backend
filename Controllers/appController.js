@@ -3,6 +3,7 @@ const { raw } = require("express");
 const Application = require("../models/application");
 const Shortlisted = require("../models/shortlist");
 const { Op } = require("sequelize");
+const crypto = require('crypto').webcrypto
 
 // Applying for the scholarship
 
@@ -106,6 +107,23 @@ exports.allWithDetails = async (req, res) => {
 
 // Shortlisting candidates depending on a
 // selection criteria( ie. CS student(regnum), gpa, gender, yrofstudy)
+
+const generateRandom = (min, max, maxRange) => {
+  var byteArray = new Uint8Array(1)
+  crypto.getRandomValues(byteArray)
+  var range = max - min + 1
+  if (byteArray[0] >= Math.floor(maxRange / range) * range) {
+    return generateRandom(min, max, maxRange)
+  }
+
+  return min + (byteArray[0] % range);
+
+}
+
+
+
+
+
 
 exports.markComplete = async (req, res) => {
   const { males, females } = req.query;

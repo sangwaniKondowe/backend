@@ -1,5 +1,5 @@
 const { Sequelize } = require("sequelize");
-const connection = new Sequelize("Api", "root", "auga.", {
+const connection = new Sequelize("Api", "postgres", "admin", {
   host: "localhost",
   dialect: "postgres",
   pool: {

@@ -114,14 +114,14 @@ exports.markComplete = async (req, res) => {
     where: {
       gender: "female",
     },
-    order: ["gpa", "ASC"],
+    order: [["gpa", "ASC"]],
   });
 
   const malesArr = await Application.findAll({
     where: {
       gender: "males",
     },
-    order: ["gpa", "ASC"],
+    order: [["gpa", "ASC"]],
   });
 
   //holders for filtering

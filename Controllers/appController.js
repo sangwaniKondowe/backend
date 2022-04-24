@@ -110,64 +110,67 @@ exports.allWithDetails = async (req, res) => {
 exports.markComplete = async (req, res) => {
   const { males, females } = req.query;
 
-  await Application.findAll({
-    order: ["gpa"],
-  }).then(async (response) => {
-    let allowedToApply = response.filter((applicant) =>
-      applicant.regNum.includes("bsc")
-    );
-
-    const femaleArr = allowedToApply.filter((f) => f.gender === "female");
-    const malesArr = allowedToApply.filter((f) => f.gender === "male");
-
-    //holders for filtering
-    let mToReturn = [];
-    let fToReturn = [];
-    let fHolder = [];
-    let mHolder = [];
-
-    const maleSetToReturn = new Set();
-    const femaleSettoReturn = new Set();
-    if (males >= malesArr.length) {
-      mToReturn = malesArr;
-    } else {
-      while (mToReturn.length != males) {
-        let first = malesArr[generateRandom(0, malesArr.length - 1, 256)];
-        mHolder.push(first);
-        mToReturn = mHolder.filter(
-          (value, index, self) =>
-            self.findIndex((v) => v.id === value.id) === index
-        );
-      }
-    }
-    if (females >= femaleArr.length) {
-      fToReturn = femaleArr;
-    } else {
-      while (fToReturn.length != females) {
-        let first = femaleArr[generateRandom(0, femaleArr.length - 1, 256)];
-        fHolder.push(first);
-        fToReturn = fHolder.filter(
-          (value, index, self) =>
-            self.findIndex((v) => v.id === value.id) === index
-        );
-      }
-    }
-
-    const m = [];
-    const f = [];
-
-    for (let fem of femaleSettoReturn) {
-      f.push(fem);
-    }
-    for (let mal of maleSetToReturn) {
-      m.push(mal);
-    }
-    // = m.concat(f)
-
-    let unique = mToReturn.concat(fToReturn);
-
-    res.send({ ele: unique });
+  const femaleArr = await Application.findAll({
+    where: {
+      gender: "female",
+    },
+    order: ["gpa", "ASC"],
   });
+
+  const malesArr = await Application.findAll({
+    where: {
+      gender: "males",
+    },
+    order: ["gpa", "ASC"],
+  });
+
+  //holders for filtering
+  let mToReturn = [];
+  let fToReturn = [];
+  let fHolder = [];
+  let mHolder = [];
+
+  const maleSetToReturn = new Set();
+  const femaleSettoReturn = new Set();
+  if (males >= malesArr.length) {
+    mToReturn = malesArr;
+  } else {
+    while (mToReturn.length != males) {
+      let first = malesArr[generateRandom(0, malesArr.length - 1, 256)];
+      mHolder.push(first);
+      mToReturn = mHolder.filter(
+        (value, index, self) =>
+          self.findIndex((v) => v.id === value.id) === index
+      );
+    }
+  }
+  if (females >= femaleArr.length) {
+    fToReturn = femaleArr;
+  } else {
+    while (fToReturn.length != females) {
+      let first = femaleArr[generateRandom(0, femaleArr.length - 1, 256)];
+      fHolder.push(first);
+      fToReturn = fHolder.filter(
+        (value, index, self) =>
+          self.findIndex((v) => v.id === value.id) === index
+      );
+    }
+  }
+
+  const m = [];
+  const f = [];
+
+  for (let fem of femaleSettoReturn) {
+    f.push(fem);
+  }
+  for (let mal of maleSetToReturn) {
+    m.push(mal);
+  }
+  // = m.concat(f)
+
+  let unique = mToReturn.concat(fToReturn);
+
+  res.send({ ele: unique });
 };
 
 //   unique.map(async app => {

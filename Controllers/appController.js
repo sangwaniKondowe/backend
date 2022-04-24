@@ -153,38 +153,51 @@ exports.markComplete = async (req, res) => {
   if (males >= malesArr.length) {
     mToReturn = malesArr;
   } else {
-    while (mToReturn.length != males) {
-      let first = malesArr[generateRandom(0, malesArr.length - 1, 256)];
-      mHolder.push(first);
-      mToReturn = mHolder.filter(
-        (value, index, self) =>
-          self.findIndex((v) => v.id === value.id) === index
-      );
+    const deservingMale = malesArr.filter((m) => {
+      return m.regNum.includes("bsc") && !(m.yrofstudy > 3);
+    });
+
+    if (males >= deservingMale.length) {
+      mToReturn = deservingMale;
+    } else {
+      for (let i = 0; i < males; i++) {
+        mToReturn.push(deservingMale[i]);
+      }
     }
+
+    // while (mToReturn.length != males) {
+    //   let first = malesArr[generateRandom(0, malesArr.length - 1, 256)];
+    //   mHolder.push(first);
+    //   mToReturn = mHolder.filter(
+    //     (value, index, self) =>
+    //       self.findIndex((v) => v.id === value.id) === index
+    //   );
+    // }
   }
   if (females >= femaleArr.length) {
     fToReturn = femaleArr;
   } else {
-    while (fToReturn.length != females) {
-      let first = femaleArr[generateRandom(0, femaleArr.length - 1, 256)];
-      fHolder.push(first);
-      fToReturn = fHolder.filter(
-        (value, index, self) =>
-          self.findIndex((v) => v.id === value.id) === index
-      );
+    const deservingFemale = femaleArr.filter((f) => {
+      return f.regNum.includes("bsc") && !(f.yrofstudy > 3);
+    });
+
+    if (females >= deservingFemale.length) {
+      fToReturn = deservingFemale;
+    } else {
+      for (let i = 0; i < females; i++) {
+        fToReturn.push(deservingFemale[i]);
+      }
     }
-  }
 
-  const m = [];
-  const f = [];
-
-  for (let fem of femaleSettoReturn) {
-    f.push(fem);
+    // while (fToReturn.length != females) {
+    //   let first = femaleArr[generateRandom(0, femaleArr.length - 1, 256)];
+    //   fHolder.push(first);
+    //   fToReturn = fHolder.filter(
+    //     (value, index, self) =>
+    //       self.findIndex((v) => v.id === value.id) === index
+    //   );
+    // }
   }
-  for (let mal of maleSetToReturn) {
-    m.push(mal);
-  }
-  // = m.concat(f)
 
   let unique = mToReturn.concat(fToReturn);
 

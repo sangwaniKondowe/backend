@@ -115,11 +115,11 @@ exports.markComplete = async (req, res) => {
   }).then(async (response) => {
     let allowedToApply = response.filter((applicant) => {
       return (
-        (applicant.regnum.includes("bed-com") ||
-          applicant.regnum.includes("bsc-com") ||
-          applicant.regnum.includes("bsc-inf") ||
-          applicant.regnum.includes("bsc-net") ||
-          applicant.regnum.includes("bsc")) &&
+        (applicant.regNum.includes("bed-com") ||
+          applicant.regNum.includes("bsc-com") ||
+          applicant.regNum.includes("bsc-inf") ||
+          applicant.regNum.includes("bsc-net") ||
+          applicant.regNum.includes("bsc")) &&
         !applicant.yrofstudy > 3
       );
     });

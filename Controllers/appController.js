@@ -113,9 +113,8 @@ exports.markComplete = async (req, res) => {
   await Application.findAll({
     order: ["gpa"],
   }).then(async (response) => {
-    let allowedToApply = response.filter(
-      (applicant) =>
-        applicant.regNum.includes("bsc") && !applicant.yrofstudy > 3
+    let allowedToApply = response.filter((applicant) =>
+      applicant.regNum.includes("bsc")
     );
 
     const femaleArr = allowedToApply.filter((f) => f.gender === "female");

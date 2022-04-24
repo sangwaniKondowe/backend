@@ -136,7 +136,10 @@ exports.markComplete = async (req, res) => {
     mToReturn = malesArr;
   } else {
     const deservingMale = malesArr.filter((m) => {
-      return m.regNum.includes("bsc") && !(m.yrofstudy > 3);
+      return (
+        m.regNum.includes("bsc") ||
+        (m.regNum.includes("bed-com") && !(m.yrofstudy > 3))
+      );
     });
 
     if (males >= deservingMale.length) {
@@ -160,7 +163,10 @@ exports.markComplete = async (req, res) => {
     fToReturn = femaleArr;
   } else {
     const deservingFemale = femaleArr.filter((f) => {
-      return f.regNum.includes("bsc") && !(f.yrofstudy > 3);
+      return (
+        f.regNum.includes("bsc") ||
+        (f.regNum.includes("bed-com") && !(f.yrofstudy > 3))
+      );
     });
 
     if (females >= deservingFemale.length) {

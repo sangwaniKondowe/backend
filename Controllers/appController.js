@@ -317,7 +317,7 @@ console.log(all)
     all.forEach(element => {
       app.push({
         "id":element.id,
-        "UUID": element.uuid,
+        "uuid": element.uuid,
         "status": element.status,
         "firstname": element.application.firstname,
         "lastname": element.application.lastname,
@@ -332,7 +332,7 @@ console.log(all)
     });
 
     
-    res.send({ applications: all })
+    res.send({ applications: app })
   } else {
     res.status(404).send("no approved applications");
   }

@@ -5,6 +5,7 @@ const Shortlisted = require("../models/shortlist");
 const { Op } = require("sequelize");
 const crypto = require('crypto').webcrypto
 const moment = require('moment')
+const nodemailer = require('nodemailer');
 
 // Applying for the scholarship
 
@@ -213,7 +214,69 @@ exports.markComplete = async (req, res) => {
     }
    
   })
+
+  const emails = []
+  unique.forEach(mail => {
+  emails.push({
+    "email": mail.email,
+    })
+  })
+  //res.send({email: emails})
+
+  let allemails = emails.reduce((arr, email) => {
+    arr.push(email.email)
+    return (arr)
+  }, [])
+
+  sendEmail(allemails)
 };
+
+
+
+
+
+
+
+
+
+
+
+
+function sendEmail(allemails) {
+
+  // create reusable transporter object using the default SMTP transport
+  let transporter = nodemailer.createTransport({
+    host: "smtp.ethereal.email",
+    port: 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+      user: 'buy73v3n7psfqxrh@ethereal.email', // generated ethereal user
+      pass: 'Wanhtrw7MRjv9p3xuS'  // generated ethereal password
+    },
+    tls: {
+      rejectUnauthorized: false
+    }
+  });
+
+  // setup email data with unicode symbols
+  let mailOptions = {
+    from: '"Glen Fally Contact" <gfemail@gmail.com>', // sender address
+    to: allemails, // list of receivers
+    subject: 'Glen Fally Scholarship Approval', // Subject line
+    html: "<b>You have been shortlisted for the Glen Fally Scholarship interviews. For more details contact: 123456778</b>" // html body
+  };
+
+  // send mail with defined transport object
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      return console.log(error);
+    }
+    console.log('Email(s) sent: %s', info.messageId);
+    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+
+  });
+
+}
 
 //   unique.map(async app => {
 //     await Application.update({ status: "COMPLETED" }, {
@@ -337,3 +400,31 @@ console.log(all)
     res.status(404).send("no approved applications");
   }
 }
+
+
+exports.prevShortlisted = async (req, res) => {
+
+  const TODAY_START = moment()
+  const NOW = moment.duration(1, "year")
+  
+  
+    try {
+      const history = await Shortlisted.findAll({
+       // attributes: ["createdAt"],
+        where: {
+          createdAt: {
+            [Op.between]: [ TODAY_START , NOW],
+          },
+        },
+        logging: console.log,
+        raw: true,
+        order: [["createdAt", "ASC"]],
+        //limit: count
+      });
+      if (history) {
+        res.send(history);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };

@@ -21,6 +21,6 @@ router.get('/statusComplete', require('../Controllers/appController').statusComp
  
 // router.post('/overrideSelection/:uuid', validateToken, preAuthorize('ADMIN') ,require('../Controllers/appController').overrideSelection)
 
-// router.get('/all_applications',validateToken, preAuthorize('ADMIN'), require('../Controllers/appController').pendingApp)
+router.get('/prev', require('../Controllers/appController').prevShortlisted)
 
 module.exports = router

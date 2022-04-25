@@ -33,7 +33,8 @@ Shortlisted.belongsTo(Application)
 Application.hasMany(Shortlisted, {
     foreignKey: 'applicationId',
     onDelete: 'CASCADE',
-    onUpdate: 'CASCADE'
+    onUpdate: 'CASCADE',
+
 })
 
 Course.belongsTo(Application)

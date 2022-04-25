@@ -17,7 +17,7 @@ router.get('/allApplications', details)
 router.get('/markComplete', shortlist)
 router.get('/getPrev', history)
 
-// router.get('/statusComplete', require('../Controllers/appController').statusComplete)
+router.get('/statusComplete', require('../Controllers/appController').statusComplete)
  
 // router.post('/overrideSelection/:uuid', validateToken, preAuthorize('ADMIN') ,require('../Controllers/appController').overrideSelection)
 

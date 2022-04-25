@@ -4,6 +4,7 @@ const Application = require("../models/application");
 const Shortlisted = require("../models/shortlist");
 const { Op } = require("sequelize");
 const crypto = require('crypto').webcrypto
+const moment = require('moment')
 
 // Applying for the scholarship
 
@@ -132,14 +133,14 @@ exports.markComplete = async (req, res) => {
     where: {
       gender: "female",
     },
-    order: [["gpa", "ASC"]],
+    order: [["gpa", "DESC"]],
   });
 
   const malesArr = await Application.findAll({
     where: {
-      gender: "males",
+      gender: "male",
     },
-    order: [["gpa", "ASC"]],
+    order: [["gpa", "DESC"]],
   });
 
   //holders for filtering
@@ -194,20 +195,24 @@ exports.markComplete = async (req, res) => {
         fToReturn.push(deservingFemale[i]);
       }
     }
-
-    // while (fToReturn.length != females) {
-    //   let first = femaleArr[generateRandom(0, femaleArr.length - 1, 256)];
-    //   fHolder.push(first);
-    //   fToReturn = fHolder.filter(
-    //     (value, index, self) =>
-    //       self.findIndex((v) => v.id === value.id) === index
-    //   );
-    // }
   }
 
   let unique = mToReturn.concat(fToReturn);
 
   res.send({ ele: unique });
+
+  unique.map(async app => {
+      const pp = await Shortlisted.create({
+        applicationId: app.id
+      })
+      if(pp) {
+        Shortlisted.update({ status: "COMPLETED" }, {
+                where: { applicationId: app.id }
+              })
+      
+    }
+   
+  })
 };
 
 //   unique.map(async app => {
@@ -259,13 +264,17 @@ exports.markComplete = async (req, res) => {
 //     sendEmail(allemails)
 
 exports.prevBen = async (req, res) => {
+
+const TODAY_START = moment().format('YYYY-MM-DD 00:00');
+const NOW = moment().format('YYYY-MM-DD 23:59')
+
+
   try {
     const history = await Shortlisted.findAll({
-      attributes: ["createdAt"],
+     // attributes: ["createdAt"],
       where: {
         createdAt: {
-          [Op.between]: ["2021-01-01 00:00:00", "2021-12-31 00:00:00"],
-          [Op.between]: ["2022-01-01 00:00:00", "2020-12-31 00:00:00"],
+          [Op.between]: [ TODAY_START , NOW],
         },
       },
       logging: console.log,
@@ -280,3 +289,51 @@ exports.prevBen = async (req, res) => {
     console.log(err);
   }
 };
+
+
+exports.statusComplete = async (req, res) => {
+  const all = await Shortlisted.findAll({
+    where: {
+      status: "COMPLETED",
+    },
+    include: {
+      model: Application,
+      attributes: [
+        "firstname",
+        "lastname",
+        "email",
+        "regNum",
+        "gender",
+        "yrofstudy",
+        "gpa"
+      ]}
+    })
+  if (all) {
+
+console.log(all)
+
+    const app = []
+
+    all.forEach(element => {
+      app.push({
+        "id":element.id,
+        "UUID": element.uuid,
+        "status": element.status,
+        "firstname": element.application.firstname,
+        "lastname": element.application.lastname,
+        "email": element.application.email,
+        "regNum": element.application.regNum,
+        "yrofstudy": element.application.yrofstudy,
+        "gender": element.application.gender,
+        "gpa": element.application.gpa,
+      }
+      );
+
+    });
+
+    
+    res.send({ applications: all })
+  } else {
+    res.status(404).send("no approved applications");
+  }
+}

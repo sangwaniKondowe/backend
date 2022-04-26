@@ -14,10 +14,10 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "NO ACTION",
       }).then(async () => {
-        return await queryInterface.addColumn("courses", "applicationId", {
+        return await queryInterface.addColumn("beneficiaries", "shortlistId", {
           type: DataTypes.INTEGER,
           references: {
-            model: "applications", // name of Target model
+            model: "shortlists", // name of Target model
             key: "id", // key in Target model that we're referencing
           },
           onUpdate: "CASCADE",
@@ -29,7 +29,7 @@ module.exports = {
        return await queryInterface
          .removeColumn("shortlists", "applicationId")
          .then(async () => {
-          return await queryInterface.removeColumn("courses", "applicationId");
+          return await queryInterface.removeColumn("beneficiaries", "shortlistId");
         })
     },
 };

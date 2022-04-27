@@ -29,11 +29,9 @@ router.get('/statusComplete', getAllShortlisted)
  
 router.get('/getBeneficiaries',require('../Controllers/appController').beneficiaries)
 
-<<<<<<< HEAD
+
 router.get('/add', require('../Controllers/appController').addBeneficiary)
-=======
 router.get('/prev', require('../Controllers/appController').prevShortlisted)
 router.post('/addBen/:regNumber', add)
->>>>>>> f4a870acfd7a6505d20c6afa9369bb82fe360b68
 
 module.exports = router

@@ -282,8 +282,7 @@ function sendEmail(allemails) {
 
 // Retrieve previous records accorting to time 
 
-<<<<<<< HEAD
-=======
+
 exports.prevBen = async (req, res) => {
 
   const { year } = req.query
@@ -343,7 +342,7 @@ exports.prevBen = async (req, res) => {
 
 // Get all the shortlisted candidates from the table 
 
->>>>>>> f4a870acfd7a6505d20c6afa9369bb82fe360b68
+
 exports.statusComplete = async (req, res) => {
   const all = await Shortlisted.findAll({
     where: {
@@ -419,7 +418,7 @@ exports.prevShortlisted = async (req, res) => {
     }
   };
 
-<<<<<<< HEAD
+
 exports.addBeneficiary = async(req, res) => {
 
   try {
@@ -494,7 +493,7 @@ console.log(all)
 }
 
 exports.countAllShortlisted = async (req, res) => {
-=======
+
  exports.addBeneficiary = async (req, res) => {
 
        const regNumber = req.params.regNum
@@ -534,7 +533,7 @@ exports.countAllShortlisted = async (req, res) => {
 
 
  exports.countAllShortlisted = async (req, res) => {
->>>>>>> f4a870acfd7a6505d20c6afa9369bb82fe360b68
+
   try {
     const all = await Shortlisted.findAll({
       where: {

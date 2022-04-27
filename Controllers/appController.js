@@ -1,7 +1,8 @@
 "use strict";
 const { raw } = require("express");
 const Application = require("../models/application");
-const Shortlisted = require("../models/shortlist");
+const Beneficiary = require("../models/beneficiary");
+const Shortlisted = require("../models/shortlist")
 const { Op } = require("sequelize");
 const crypto = require('crypto').webcrypto
 const moment = require('moment')
@@ -326,34 +327,6 @@ function sendEmail(allemails) {
 
 //     sendEmail(allemails)
 
-exports.prevBen = async (req, res) => {
-
-const TODAY_START = moment().format('YYYY-MM-DD 00:00');
-const NOW = moment().format('YYYY-MM-DD 23:59')
-
-
-  try {
-    const history = await Shortlisted.findAll({
-     // attributes: ["createdAt"],
-      where: {
-        createdAt: {
-          [Op.between]: [ TODAY_START , NOW],
-        },
-      },
-      logging: console.log,
-      raw: true,
-      order: [["createdAt", "ASC"]],
-      //limit: count
-    });
-    if (history) {
-      res.send(history);
-    }
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-
 exports.statusComplete = async (req, res) => {
   const all = await Shortlisted.findAll({
     where: {
@@ -428,3 +401,138 @@ exports.prevShortlisted = async (req, res) => {
       console.log(err);
     }
   };
+
+exports.addBeneficiary = async(req, res) => {
+
+  try {
+    const {regNum} = req.query;
+
+
+    const add = await Application.findOne({
+      where: {
+        regNum
+      }
+    })
+    console.log(add)
+    if (add === null) {
+
+      res.send({message: "Registration number does not exist."})
+    }else {
+      const ben = await Beneficiary.create({
+        applicationId: add.id
+      })
+
+      res.send({message: "Operation successful!"})
+    }
+
+
+  }catch(err) {
+    console.log(err)
+  }
+}
+
+exports.beneficiaries = async (req, res) => {
+  const all = await Beneficiary.findAll({
+    include: {
+      model: Application,
+      attributes: [
+        "firstname",
+        "lastname",
+        "email",
+        "regNum",
+        "gender",
+        "yrofstudy",
+        "gpa"
+      ]}
+    })
+  if (all) {
+
+console.log(all)
+
+    const app = []
+
+    all.forEach(element => {
+      app.push({
+        "id":element.id,
+        "uuid": element.uuid,
+        "status": element.status,
+        "firstname": element.application.firstname,
+        "lastname": element.application.lastname,
+        "email": element.application.email,
+        "regNum": element.application.regNum,
+        "yrofstudy": element.application.yrofstudy,
+        "gender": element.application.gender,
+        "gpa": element.application.gpa,
+      }
+      );
+
+    });
+
+    
+    res.send({ beneficiaries: app })
+  } else {
+    res.status(404).send("no approved applications");
+  }
+}
+
+exports.countAllShortlisted = async (req, res) => {
+  try {
+    const all = await Shortlisted.findAll({
+      where: {
+        status: "COMPLETED",
+      },
+      include: {
+        model: Application,
+        attributes: [
+          "firstname",
+          "lastname",
+          "email",
+          "regNum",
+          "gender",
+          "yrofstudy",
+          "gpa"
+        ]}
+    });
+    if (all) {
+
+      const detail = []
+
+      all.forEach(element => {
+        detail.push({
+          "id":element.id,
+          "uuid": element.uuid,
+          "status": element.status,
+          "firstname": element.application.firstname,
+          "lastname": element.application.lastname,
+          "email": element.application.email,
+          "regNum": element.application.regNum,
+          "yrofstudy": element.application.yrofstudy,
+          "gender": element.application.gender,
+          "gpa": element.application.gpa,
+        }
+        );
+  
+      });
+
+  
+      const females = detail.filter((app) => app.gender === "female");
+      const males = detail.filter((app) => app.gender === "male");
+      const yr2 = detail.filter((app) => app.yrofstudy === 2);
+      const yr3 = detail.filter((app) => app.yrofstudy === 3);
+     
+      const dataToReturn = {
+        totalShortlisted: detail.length,
+        totalFemales: females.length,
+        totalMales: males.length,
+        secondyr: yr2.length,
+        thirdyr: yr3.length,
+      };
+
+      res.send(dataToReturn);
+    } else {
+      res.status(404).send("Nothing to display");
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};

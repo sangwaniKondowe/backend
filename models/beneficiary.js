@@ -2,7 +2,7 @@
 
 const dbConnection = require("../dbConnection")
 const DataTypes = require("sequelize");
-const Course = dbConnection.define('courses', {
+const Beneficiary = dbConnection.define('beneficiaries', {
 
   // Model attributes are defined here
   id: {
@@ -17,17 +17,9 @@ const Course = dbConnection.define('courses', {
     defaultValue: DataTypes.UUIDV4,
     unique: true,
   },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  regType: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
 }, {
 
   timestamps: true
 });
 
-module.exports = Course
+module.exports = Beneficiary

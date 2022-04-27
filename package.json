@@ -21,6 +21,8 @@
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
+    "esdoc": "^1.1.0",
+    "esdoc-standard-plugin": "^1.0.0",
     "express": "^4.17.3",
     "helmet": "^5.0.2",
     "jsonwebtoken": "^8.5.1",
@@ -35,5 +37,8 @@
     "sequelize-auto": "^0.8.8",
     "sequelize-cli": "^6.4.1",
     "typescript": "^4.6.3"
+  },
+  "devDependencies": {
+    "documentjs": "^0.5.5"
   }
 }

@@ -7,6 +7,7 @@ const { Op } = require("sequelize");
 const crypto = require('crypto').webcrypto
 const moment = require('moment')
 const nodemailer = require('nodemailer');
+const Beneficiary = require('../models/beneficiary')
 
 // Applying for the scholarship
 
@@ -279,54 +280,70 @@ function sendEmail(allemails) {
 
 }
 
-//   unique.map(async app => {
-//     await Application.update({ status: "COMPLETED" }, {
-//       where: { id: app.id }
-//     })
-//  })
+// Retrieve previous records accorting to time 
 
-//   let toRData = unique.map(ui => {
-//     return { ...ui, status: "COMPLETED" }
-//   })
-//   if (toRData) {
+<<<<<<< HEAD
+=======
+exports.prevBen = async (req, res) => {
 
-//     let user = [];
-//     toRData.forEach(element => {
-//       user.push({
-//         "id": element.id,
-//         "uuid": element.uuid,
-//         "firstname": element.firstname,
-//         "lastname": element.lastname,
-//         "email": element.email,
-//         "regnum": element.regnum,
-//         "yrofstudy": element.user.yrofstudy,
-//         "gender": element.user.gender,
-//         "gpa": element.user.gpa,
-//       }
-//       );
+  const { year } = req.query
+//const year = 2022
 
-//     });
-//     res.send({ complete: user })
+  try {
+    const history = await Shortlisted.findAll({
+     // attributes: ["createdAt"],
+      where: {
+        createdAt: {
+          [Op.between]: [`${year}-01-01 00:00:00.857+02`, `${year}-12-31 23:59:00.857+02` ],
+        },
+      },
+      include: {
+          model: Application,
+          attributes: [
+            "firstname",
+            "lastname",
+            "gender",
+            "yrofstudy",
+            "regNum",
 
-// const emails = []
-// user.forEach(mail => {
-//   emails.push({
-//     "email": mail.email,
-//   })
-// })
-//console.log(emails)
+          ]
+      },
+      logging: console.log,
+      order: [["createdAt", "ASC"]],
+      //limit: count
+    });
+    if (history) {
+      const sht = []
+    history.forEach(element => {
+      sht.push({
+        "id":element.id,
+        "uuid": element.uuid,
+        "firstname": element.application.firstname,
+        "lastname": element.application.lastname,
+        "email": element.application.email,
+        "regNum": element.application.regNum,
+        "yrofstudy": element.application.yrofstudy,
+        "gender": element.application.gender,
+        "gpa": element.application.gpa,
+        
+      });});
+      const dataToReturn = {
+        totalShortlisted: sht.length,
+        
+      };
 
-//let stringMessage = Object.values(emails);
+      const every = sht.concat(dataToReturn)
+      //res.send(sht);
+      res.send(every)
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
 
-//     let allemails = emails.reduce((arr, email) => {
-//       arr.push(email.email)
-//       return (arr)
-//     }, [])
+// Get all the shortlisted candidates from the table 
 
-//     //console.log(allemails)
-
-//     sendEmail(allemails)
-
+>>>>>>> f4a870acfd7a6505d20c6afa9369bb82fe360b68
 exports.statusComplete = async (req, res) => {
   const all = await Shortlisted.findAll({
     where: {
@@ -402,6 +419,7 @@ exports.prevShortlisted = async (req, res) => {
     }
   };
 
+<<<<<<< HEAD
 exports.addBeneficiary = async(req, res) => {
 
   try {
@@ -476,6 +494,47 @@ console.log(all)
 }
 
 exports.countAllShortlisted = async (req, res) => {
+=======
+ exports.addBeneficiary = async (req, res) => {
+
+       const regNumber = req.params.regNum
+
+       try {
+         const search = await Shortlisted.findOne({
+           where: {
+              regNumber 
+           },
+           include: {
+             model: Application,
+             required: true,
+             attributes: [
+              "regNum",
+             ]
+           },
+           raw: true,
+           nest: true,
+         })
+
+         console.log(search)
+         if (search === null) {
+          res.status(401).json({ message: "no such regstration number exists" });
+        }
+         else {
+          console.log(search)
+          await Beneficiary.create({
+            shortlistId: search.id 
+          })
+         }
+
+       }
+       catch(err) {
+         console.log(err)
+       }
+ }
+
+
+ exports.countAllShortlisted = async (req, res) => {
+>>>>>>> f4a870acfd7a6505d20c6afa9369bb82fe360b68
   try {
     const all = await Shortlisted.findAll({
       where: {

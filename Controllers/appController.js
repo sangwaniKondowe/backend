@@ -299,6 +299,8 @@ exports.prevBen = async (req, res) => {
           attributes: [
             "firstname",
             "lastname",
+            "email",
+            "gpa",
             "gender",
             "yrofstudy",
             "regNum",

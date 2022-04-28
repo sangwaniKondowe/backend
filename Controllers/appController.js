@@ -201,6 +201,7 @@ exports.markComplete = async (req, res) => {
 
   let unique = mToReturn.concat(fToReturn);
 
+  //console.log(unique)
   res.send({ ele: unique });
 
   unique.map(async app => {
@@ -500,6 +501,82 @@ exports.prevShortlisted = async (req, res) => {
       };
 
       res.send(dataToReturn);
+    } else {
+      res.status(404).send("Nothing to display");
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+exports.addBeneficiary = async(req, res) => {
+
+  try {
+    const {regNum} = req.query;
+
+
+    const add = await Application.findOne({
+      where: {
+        regNum
+      }
+    })
+    console.log(add)
+    if (add === null) {
+
+      res.send({message: "Registration number does not exist."})
+    }else {
+      const ben = await Beneficiary.create({
+        applicationId: add.id
+      })
+
+      res.send({message: "Operation successful!"})
+    }
+
+
+  }catch(err) {
+    console.log(err)
+  }
+}
+
+
+exports.getBeneficiaries = async (req, res) => {
+  try {
+    const all = await Beneficiary.findAll({
+      include: {
+        model: Application,
+        attributes: [
+          "firstname",
+          "lastname",
+          "email",
+          "regNum",
+          "gender",
+          "yrofstudy",
+          "gpa"
+        ]}
+    });
+    if (all) {
+
+      const detail = []
+
+      all.forEach(element => {
+        detail.push({
+          "id":element.id,
+          "uuid": element.uuid,
+          "status": element.status,
+          "firstname": element.application.firstname,
+          "lastname": element.application.lastname,
+          "email": element.application.email,
+          "regNum": element.application.regNum,
+          "yrofstudy": element.application.yrofstudy,
+          "gender": element.application.gender,
+          "gpa": element.application.gpa,
+        }
+        );
+  
+      });
+
+
+      res.send(detail);
     } else {
       res.status(404).send("Nothing to display");
     }

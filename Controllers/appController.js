@@ -422,19 +422,10 @@ exports.prevShortlisted = async (req, res) => {
        const regNumber = req.params.regNum
 
        try {
-         const search = await Shortlisted.findOne({
+         const search = await Application.findOne({
            where: {
               regNumber 
            },
-           include: {
-             model: Application,
-             required: true,
-             attributes: [
-              "regNum",
-             ]
-           },
-           raw: true,
-           nest: true,
          })
 
          console.log(search)

@@ -26,6 +26,6 @@ router.get('/statusComplete', getAllShortlisted)
 // router.post('/overrideSelection/:uuid', validateToken, preAuthorize('ADMIN') ,require('../Controllers/appController').overrideSelection)
 
 router.get('/prev', require('../Controllers/appController').prevShortlisted)
-router.post('/addBen/:regNumber', add)
+router.post('/addBen', add)
 
 module.exports = router

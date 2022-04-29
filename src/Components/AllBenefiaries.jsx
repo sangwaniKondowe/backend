@@ -25,7 +25,7 @@ function AllBenefiaries() {
         axios.get(baseUrl)
         .then(res => {
           console.log(res)
-          setData(res.data.beneficiaries)
+        setData(res.data)
         
             
         })

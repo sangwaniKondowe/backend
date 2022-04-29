@@ -105,7 +105,7 @@ useEffect(() => {
                
                   <Typography variant="h6" component="h6" className={classes.applicantsNumber}>
 
-                  
+                  <h1 style={{color:'red'}}>{data.totalFemales}</h1>
                
                   </Typography>
                 </CardContent>

@@ -121,7 +121,7 @@ useEffect(() => {
                 <CardContent className={classes.cardCentent}>
                   <Typography variant="body2" className={classes.cardLabel}>
 
-                  total male applicants
+                  total male applicants 
 
                   </Typography>
 

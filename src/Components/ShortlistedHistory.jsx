@@ -17,9 +17,23 @@ function History() {
   const classes = useStyles();
 
  
-
   const [data, setData] = useState([])
+  const [selected, setSelected] = useState("2022");
 
+  useEffect(()=>{
+    getApplicantsInAYear(selected)
+  }, [])
+
+
+  const getApplicantsInAYear= (year)=>{
+    
+    const Url = "http://localhost:5000/application/getPrev?year="+ year
+    axios.get(Url)
+    .then(response => {  
+     setData(response.data)
+     console.log(response.data)
+    })
+  }
 
  const year = (new Date()).getFullYear();
   var years= []
@@ -27,34 +41,14 @@ function History() {
         years.push(i)
     }
 
-    const [selected, setSelected] = useState("2022");
-    /**
-     * I'm trying to get the data from the database and display it in the table.
-     */
-    const handleSubmit = (e) => {
-      e.preventDefault();
-        
-      
-    const Url = "http://localhost:5000/application/getPrev?year="+ selected
-    axios.get(Url)
-    .then(response => {
-      
-        
-    
-     setData(response.data)
-     
-     
-    
-    })
-    }
 
-    /**
-     * When the user changes the value of the select element, update the state of the component with
-     * the new value.
-     */
     const  handleChange = (event) => {
       setSelected(event.target.value);
+      console.log("Selected :"+selected + "Target : "+event.target.value)
+      getApplicantsInAYear(event.target.value)
     }
+    
+ 
  
   return (
     <div>
@@ -70,7 +64,7 @@ function History() {
           name: "year",
           id: "year-simple"
         }}
-        onClick={handleSubmit}
+        
         fullWidth
       >
         {years.map((year, index) => {

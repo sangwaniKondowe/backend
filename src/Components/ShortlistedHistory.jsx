@@ -78,7 +78,7 @@ function History() {
      
     </Box>
 
-    total previous applicants
+    total previous shortlisted
     {data.map((num) => (
       <h3 style={{color:'red'}}>{num.totalShortlisted}</h3>
     ))}
@@ -92,10 +92,7 @@ function History() {
       <TableCell className={classes.tableHeard}>First Name</TableCell>
       <TableCell className={classes.tableHeard} >Last Name</TableCell>
       <TableCell className={classes.tableHeard}>Gender</TableCell>
-      <TableCell className={classes.tableHeard}>Email</TableCell>
-      <TableCell className={classes.tableHeard}>R.Number</TableCell>
       <TableCell className={classes.tableHeard} >Year Of Study</TableCell>
-      <TableCell className={classes.tableHeard}>GPA</TableCell>
     
       
     </TableRow>
@@ -108,10 +105,8 @@ function History() {
         <TableCell >{row.firstname}</TableCell>
         <TableCell >{row.lastname}</TableCell>
         <TableCell >{row.gender}</TableCell>
-        <TableCell >{row.email}</TableCell>
-        <TableCell >{row.regNum}</TableCell>
         <TableCell >{row.yrofstudy}</TableCell>
-        <TableCell >{row.gpa}</TableCell>
+      
         
         
         

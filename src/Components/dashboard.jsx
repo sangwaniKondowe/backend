@@ -10,7 +10,7 @@ import DataAnalytics from './DataAnalytics'
 import axios from 'axios';
 
 import History from './ShortlistedHistory';
-
+import BeneficiaryHistory from './BeneficiaryHistory';
 
 function Dashboard() {
 
@@ -66,7 +66,7 @@ useEffect(() => {
         
 
     
-        <Grid container spacing={4}>
+        <Grid container spacing={2}>
 
           <Grid item xs={6} sm={4}>
               <Card style={{ height: '100%' }} >
@@ -142,7 +142,7 @@ useEffect(() => {
 
 
 
-            <Grid item xs={8} sm={8}>
+            <Grid item xs={6} sm={6}>
               <Card style={{ height: '100%' }} >
 
                 <CardContent className={classes.cardCentent}>
@@ -166,6 +166,33 @@ useEffect(() => {
               </Card>
 
             </Grid>
+
+
+            <Grid item xs={6} sm={6}>
+              <Card style={{ height: '100%' }} >
+
+                <CardContent className={classes.cardCentent}>
+                  <Typography variant="body2" className={classes.cardLabel}>
+
+                  
+
+                  </Typography>
+
+                
+                  <Typography variant="h6" component="h6" className={classes.applicantsNumber}>
+
+                
+                <BeneficiaryHistory/>
+                  
+
+                  </Typography>
+                </CardContent>
+
+
+              </Card>
+
+            </Grid>
+
 
 
             </Grid>

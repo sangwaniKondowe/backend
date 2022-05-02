@@ -9,7 +9,7 @@ const nodemailer = require('nodemailer');
 const Beneficiary = require('../models/beneficiary');
 const { Console } = require("console");
 
-// Applying for the scholarship
+// Endpint allowing students to apply for the scholarship
 
 exports.sending_application = async (req, res) => {
   const {
@@ -284,7 +284,7 @@ function sendEmail(allemails) {
 
 // Retrieve previous records according to year
 
-exports.prevBen = async (req, res) => {
+exports.prevShort = async (req, res) => {
 
   const { year } = req.query
 //const year = 2022
@@ -320,7 +320,7 @@ exports.prevBen = async (req, res) => {
   }
 };
 
-// Get all the shortlisted candidates from the table 
+// An endpoint getting all that have been shortlisted for the interviews with their details
 
 exports.statusComplete = async (req, res) => {
   const all = await Shortlisted.findAll({
@@ -369,62 +369,142 @@ console.log(all)
 }
 
 
-// exports.prevShortlisted = async (req, res) => {
+exports.prevBen = async (req, res) => {
 
-//   const TODAY_START = moment()
-//   const NOW = moment.duration(1, "year")
+  const { year } = req.query
+//const year = 2022
+
+  try {
+    const history = await Beneficiary.findAll({
+     // attributes: ["createdAt"],
+      where: {
+        createdAt: {
+          [Op.between]: [`${year}-01-01 00:00:00.857+02`, `${year}-12-31 23:59:00.857+02` ],
+        },
+      },
+      include: {
+          model: Application,
+          attributes: [
+            "firstname",
+            "lastname",
+            "email",
+            "gpa",
+            "gender",
+            "yrofstudy",
+            "regNum",
+
+          ]
+      },
+      logging: console.log,
+      order: [["createdAt", "ASC"]],
+      //limit: count
+    });
+    if (history) {
+      const sht = []
+    history.forEach(element => {
+      sht.push({
+        "id":element.id,
+        "uuid": element.uuid,
+        "firstname": element.application.firstname,
+        "lastname": element.application.lastname,
+        "email": element.application.email,
+        "regNum": element.application.regNum,
+        "yrofstudy": element.application.yrofstudy,
+        "gender": element.application.gender,
+        "gpa": element.application.gpa,
+        
+      });});
+      const dataToReturn = {
+        totalBeneficiaries: sht.length,
+        
+      };
+
+      const every = sht.concat(dataToReturn)
+      //res.send(sht);
+      res.send(every)
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+exports.prevApp = async (req, res) => {
+
+  const { year } = req.query
+//const year = 2022
+
+  try {
+    const history = await Application.findAll({
+      where: {
+        createdAt: {
+          [Op.between]: [`${year}-01-01 00:00:00.857+02`, `${year}-12-31 23:59:00.857+02` ],
+        },
+      },
+       include: {
+        all: true,
+        nested: true,
+        attributes: [
+            "applicationId"
+        ],
+        include: Application, Shortlisted,
+      },
+      logging: console.log,
+      order: [["createdAt", "ASC"]],
+      //limit: count
+    });
+    if (history) {
+
+      //  const detail = []
+
+      // history.forEach(element => {
+      //   detail.push({
+      //     "id":element.id,
+      //     "uuid": element.uuid,
+      //     "status": element.status,
+      //     "firstname": element.firstname,
+      //     "lastname": element.lastname,
+      //     "email": element.email,
+      //     "regNum": element.regNum,
+      //     "yrofstudy": element.yrofstudy,
+      //     "gender": element.gender,
+      //     "gpa": element.gpa,
+      //     "shortlisted": element.shortlists,
+      //     "beneficiaries": element.beneficiaries
+      //   }
+      //   );
   
+      // });
+
   
-//     try {
-//       const history = await Shortlisted.findAll({
-//        // attributes: ["createdAt"],
-//         where: {
-//           createdAt: {
-//             [Op.between]: [ TODAY_START , NOW],
-//           },
-//         },
-//         logging: console.log,
-//         raw: true,
-//         order: [["createdAt", "ASC"]],
-//         //limit: count
-//       });
-//       if (history) {
-//         res.send(history);
-//       }
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };
+      const females = history.filter((app) => app.gender === "female");
+      const males = history.filter((app) => app.gender === "male");
+     const short = history.filter((app) => app.shortlists);
+    // const ben = history.filter((app) => app.beneficiaries);
+    //  const appli = history.filter((app) => app.application)
+    
+  
+      const dataToReturn = {
+          totalApplications: history.length,
+          totalFemales : females.length,
+          totalMales : males.length,
+          totalShortlisted: short.length,
 
-//  exports.addBeneficiary = async (req, res) => {
+      // totalBeneficiaries: ben.length,
+        
+        
+      };
 
-//        const regNumber = req.params.regNum
+      const every = history.concat(dataToReturn)
+      //res.send(sht);
+      res.send(every)
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
 
-//        try {
-//          const search = await Application.findOne({
-//            where: {
-//               regNumber 
-//            },
-//          })
-
-//          console.log(search)
-//          if (search === null) {
-//           res.status(401).json({ message: "no such regstration number exists" });
-//         }
-//          else {
-//           console.log(search)
-//           await Beneficiary.create({
-//             shortlistId: search.id 
-//           })
-//          }
-
-//        }
-//        catch(err) {
-//          console.log(err)
-//        }
-//  }
-
-// counts all that are shortlisted
+ // an  endpoint that counts all that have been shortlisted
 
  exports.countAllShortlisted = async (req, res) => {
   try {

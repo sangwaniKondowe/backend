@@ -14,8 +14,8 @@ app.use(logger())
 
 const cors = require('cors');
 const corsOptions ={
-    origin:'http://localhost:3000', 
-    credentials:true,            //access-control-allow-credentials:true
+    origin:'http://localhost:3000',  // front-end connects to the backend thought port 3000
+    credentials:true,            
     optionSuccessStatus:200
 }
 app.use(cors(corsOptions));
@@ -26,6 +26,6 @@ app.use(bodyParser.json())
 app.use('/login', AuthRoutes)
 app.use('/application', appRoutes);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;  // app will be listening on port 5000
 
 app.listen(PORT, console.log(`Server started on port ${PORT}`));

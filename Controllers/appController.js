@@ -6,7 +6,8 @@ const { Op } = require("sequelize");
 const crypto = require('crypto').webcrypto
 const moment = require('moment')
 const nodemailer = require('nodemailer');
-const Beneficiary = require('../models/beneficiary')
+const Beneficiary = require('../models/beneficiary');
+const { Console } = require("console");
 
 // Applying for the scholarship
 
@@ -50,7 +51,7 @@ exports.sending_application = async (req, res) => {
   }
 };
 
-// Getting all the required information for visualization
+// counting all attributes of the application table
 
 exports.countAll = async (req, res) => {
   try {
@@ -126,7 +127,8 @@ const generateRandom = (min, max, maxRange) => {
 
 
 
-
+// an Endpoint that get the number of males and females from the administrator and shorlists candidstes
+// also sends email
 
 exports.markComplete = async (req, res) => {
   const { males, females } = req.query;
@@ -280,7 +282,7 @@ function sendEmail(allemails) {
 
 }
 
-// Retrieve previous records accorting to time 
+// Retrieve previous records according to year
 
 exports.prevBen = async (req, res) => {
 
@@ -298,43 +300,20 @@ exports.prevBen = async (req, res) => {
       include: {
           model: Application,
           attributes: [
-            "firstname",
-            "lastname",
-            "email",
-            "gpa",
-            "gender",
-            "yrofstudy",
-            "regNum",
-
-          ]
+              "firstname",
+              "lastname"
+            ]
       },
       logging: console.log,
       order: [["createdAt", "ASC"]],
       //limit: count
     });
     if (history) {
-      const sht = []
-    history.forEach(element => {
-      sht.push({
-        "id":element.id,
-        "uuid": element.uuid,
-        "firstname": element.application.firstname,
-        "lastname": element.application.lastname,
-        "email": element.application.email,
-        "regNum": element.application.regNum,
-        "yrofstudy": element.application.yrofstudy,
-        "gender": element.application.gender,
-        "gpa": element.application.gpa,
-        
-      });});
-      const dataToReturn = {
-        totalShortlisted: sht.length,
-        
-      };
+     
+  
 
-      const every = sht.concat(dataToReturn)
       //res.send(sht);
-      res.send(every)
+      res.send(history)
     }
   } catch (err) {
     console.log(err);
@@ -378,8 +357,7 @@ console.log(all)
         "yrofstudy": element.application.yrofstudy,
         "gender": element.application.gender,
         "gpa": element.application.gpa,
-      }
-      );
+      });
 
     });
 
@@ -391,61 +369,62 @@ console.log(all)
 }
 
 
-exports.prevShortlisted = async (req, res) => {
+// exports.prevShortlisted = async (req, res) => {
 
-  const TODAY_START = moment()
-  const NOW = moment.duration(1, "year")
+//   const TODAY_START = moment()
+//   const NOW = moment.duration(1, "year")
   
   
-    try {
-      const history = await Shortlisted.findAll({
-       // attributes: ["createdAt"],
-        where: {
-          createdAt: {
-            [Op.between]: [ TODAY_START , NOW],
-          },
-        },
-        logging: console.log,
-        raw: true,
-        order: [["createdAt", "ASC"]],
-        //limit: count
-      });
-      if (history) {
-        res.send(history);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+//     try {
+//       const history = await Shortlisted.findAll({
+//        // attributes: ["createdAt"],
+//         where: {
+//           createdAt: {
+//             [Op.between]: [ TODAY_START , NOW],
+//           },
+//         },
+//         logging: console.log,
+//         raw: true,
+//         order: [["createdAt", "ASC"]],
+//         //limit: count
+//       });
+//       if (history) {
+//         res.send(history);
+//       }
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   };
 
- exports.addBeneficiary = async (req, res) => {
+//  exports.addBeneficiary = async (req, res) => {
 
-       const regNumber = req.params.regNum
+//        const regNumber = req.params.regNum
 
-       try {
-         const search = await Application.findOne({
-           where: {
-              regNumber 
-           },
-         })
+//        try {
+//          const search = await Application.findOne({
+//            where: {
+//               regNumber 
+//            },
+//          })
 
-         console.log(search)
-         if (search === null) {
-          res.status(401).json({ message: "no such regstration number exists" });
-        }
-         else {
-          console.log(search)
-          await Beneficiary.create({
-            shortlistId: search.id 
-          })
-         }
+//          console.log(search)
+//          if (search === null) {
+//           res.status(401).json({ message: "no such regstration number exists" });
+//         }
+//          else {
+//           console.log(search)
+//           await Beneficiary.create({
+//             shortlistId: search.id 
+//           })
+//          }
 
-       }
-       catch(err) {
-         console.log(err)
-       }
- }
+//        }
+//        catch(err) {
+//          console.log(err)
+//        }
+//  }
 
+// counts all that are shortlisted
 
  exports.countAllShortlisted = async (req, res) => {
   try {
@@ -509,27 +488,39 @@ exports.prevShortlisted = async (req, res) => {
   }
 };
 
+// an endpoint that get restration number of student and adds it to the beneficiary table
+
 exports.addBeneficiary = async(req, res) => {
 
   try {
     const {regNum} = req.query;
 
 
-    const add = await Application.findOne({
+    const add = await Shortlisted.findOne({ 
+
       where: {
-        regNum
-      }
+        '$application.regNum$': regNum,
+      },
+      include:{
+        model: Application,
+        attributes: [
+          "id",
+          "uuid",
+          "regNum"
+        ]}
+      
     })
-    console.log(add)
     if (add === null) {
 
       res.send({message: "Registration number does not exist."})
     }else {
+        console.log(add)
+    
       const ben = await Beneficiary.create({
-        applicationId: add.id
+        shortlistId: add.application.id
       })
 
-      res.send({message: "Operation successful!"})
+      res.send({message: "Operation successful!", success: ben})
     }
 
 
@@ -538,6 +529,7 @@ exports.addBeneficiary = async(req, res) => {
   }
 }
 
+// an Endpoint that gets all the beneficiaries
 
 exports.getBeneficiaries = async (req, res) => {
   try {

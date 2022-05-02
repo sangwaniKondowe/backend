@@ -37,10 +37,10 @@ Application.hasMany(Shortlisted, {
 
 })
 
-Beneficiary.belongsTo(Application)
+Beneficiary.belongsTo(Shortlisted)
 
-Application.hasMany(Beneficiary, {
-  foreignKey: 'applicationId',
+Shortlisted.hasMany(Beneficiary, {
+  foreignKey: 'shortlistId',
   onDelete: 'CASCADE',
   onUpdate: 'CASCADE'
 })

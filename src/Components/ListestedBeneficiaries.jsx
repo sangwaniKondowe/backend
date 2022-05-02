@@ -25,9 +25,9 @@ function ListestedBeneficiaries() {
   
 
       
-      const getBeneUrl = "http://localhost:5000/application/add?regNum="+regNum;
+      const BeneUrl="http://localhost:5000/application/add?regNum="+regNum;
        
-      axios.get(getBeneUrl)
+      axios.get(BeneUrl)
       
   
       .then(response => {
@@ -39,16 +39,17 @@ function ListestedBeneficiaries() {
      }
       
     const bene =(e)=>{
-  e.preventDefault()
-setRegNum(e.target.value)
+     e.preventDefault()
+    setRegNum(e.target.value)
     }
   
+    
 
   return (
 
 
     <div>
-     <form>
+     <form onSubmit={handleSubmit}>
 
      <Grid container className={classes.selectionForm} direction="row" spacing={3}>
             <Grid item>

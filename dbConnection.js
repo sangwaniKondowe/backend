@@ -1,3 +1,5 @@
+// conection to the posgres database is initialized here
+
 const { Sequelize } = require("sequelize");
 const connection = new Sequelize("Api", "postgres", "admin", {
   host: "localhost",

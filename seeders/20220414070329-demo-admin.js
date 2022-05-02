@@ -1,5 +1,7 @@
 'use strict';
 
+// seeder containing administrator's login credentials
+
 module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.bulkInsert('admins', [
